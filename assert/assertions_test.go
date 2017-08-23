@@ -100,46 +100,46 @@ type AssertionTesterNonConformingObject struct {
 
 func TestObjectsAreEqual(t *testing.T) {
 
-	if !ObjectsAreEqual("Hello World", "Hello World") {
+	if !objectsAreEqual("Hello World", "Hello World") {
 		t.Error("objectsAreEqual should return true")
 	}
-	if !ObjectsAreEqual(123, 123) {
+	if !objectsAreEqual(123, 123) {
 		t.Error("objectsAreEqual should return true")
 	}
-	if !ObjectsAreEqual(123.5, 123.5) {
+	if !objectsAreEqual(123.5, 123.5) {
 		t.Error("objectsAreEqual should return true")
 	}
-	if !ObjectsAreEqual([]byte("Hello World"), []byte("Hello World")) {
+	if !objectsAreEqual([]byte("Hello World"), []byte("Hello World")) {
 		t.Error("objectsAreEqual should return true")
 	}
-	if !ObjectsAreEqual(nil, nil) {
+	if !objectsAreEqual(nil, nil) {
 		t.Error("objectsAreEqual should return true")
 	}
-	if ObjectsAreEqual(map[int]int{5: 10}, map[int]int{10: 20}) {
+	if objectsAreEqual(map[int]int{5: 10}, map[int]int{10: 20}) {
 		t.Error("objectsAreEqual should return false")
 	}
-	if ObjectsAreEqual('x', "x") {
+	if objectsAreEqual('x', "x") {
 		t.Error("objectsAreEqual should return false")
 	}
-	if ObjectsAreEqual("x", 'x') {
+	if objectsAreEqual("x", 'x') {
 		t.Error("objectsAreEqual should return false")
 	}
-	if ObjectsAreEqual(0, 0.1) {
+	if objectsAreEqual(0, 0.1) {
 		t.Error("objectsAreEqual should return false")
 	}
-	if ObjectsAreEqual(0.1, 0) {
+	if objectsAreEqual(0.1, 0) {
 		t.Error("objectsAreEqual should return false")
 	}
-	if ObjectsAreEqual(uint32(10), int32(10)) {
+	if objectsAreEqual(uint32(10), int32(10)) {
 		t.Error("objectsAreEqual should return false")
 	}
-	if !ObjectsAreEqualValues(uint32(10), int32(10)) {
-		t.Error("ObjectsAreEqualValues should return true")
+	if !objectsAreEqualValues(uint32(10), int32(10)) {
+		t.Error("objectsAreEqualValues should return true")
 	}
-	if ObjectsAreEqualValues(0, nil) {
+	if objectsAreEqualValues(0, nil) {
 		t.Fail()
 	}
-	if ObjectsAreEqualValues(nil, 0) {
+	if objectsAreEqualValues(nil, 0) {
 		t.Fail()
 	}
 
@@ -1380,7 +1380,7 @@ func TestBytesEqual(t *testing.T) {
 		{nil, make([]byte, 0)},
 	}
 	for i, c := range cases {
-		Equal(t, reflect.DeepEqual(c.a, c.b), ObjectsAreEqual(c.a, c.b), "case %d failed", i+1)
+		Equal(t, reflect.DeepEqual(c.a, c.b), objectsAreEqual(c.a, c.b), "case %d failed", i+1)
 	}
 }
 

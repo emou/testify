@@ -33,10 +33,10 @@ type Comparison func() (success bool)
 	Helper functions
 */
 
-// ObjectsAreEqual determines if two objects are considered equal.
+// objectsAreEqual determines if two objects are considered equal.
 //
 // This function does no assertion of any kind.
-func ObjectsAreEqual(expected, actual interface{}) bool {
+func objectsAreEqual(expected, actual interface{}) bool {
 
 	if expected == nil || actual == nil {
 		return expected == actual
@@ -54,10 +54,10 @@ func ObjectsAreEqual(expected, actual interface{}) bool {
 
 }
 
-// ObjectsAreEqualValues gets whether two objects are equal, or if their
+// objectsAreEqualValues gets whether two objects are equal, or if their
 // values are equal.
-func ObjectsAreEqualValues(expected, actual interface{}) bool {
-	if ObjectsAreEqual(expected, actual) {
+func objectsAreEqualValues(expected, actual interface{}) bool {
+	if objectsAreEqual(expected, actual) {
 		return true
 	}
 
@@ -287,7 +287,7 @@ func Implements(t TestingT, interfaceObject interface{}, object interface{}, msg
 // IsType asserts that the specified objects are of the same type.
 func IsType(t TestingT, expectedType interface{}, object interface{}, msgAndArgs ...interface{}) bool {
 
-	if !ObjectsAreEqual(reflect.TypeOf(object), reflect.TypeOf(expectedType)) {
+	if !objectsAreEqual(reflect.TypeOf(object), reflect.TypeOf(expectedType)) {
 		return Fail(t, fmt.Sprintf("Object expected to be of type %v, but was %v", reflect.TypeOf(expectedType), reflect.TypeOf(object)), msgAndArgs...)
 	}
 
@@ -309,7 +309,7 @@ func Equal(t TestingT, expected, actual interface{}, msgAndArgs ...interface{}) 
 			expected, actual, err), msgAndArgs...)
 	}
 
-	if !ObjectsAreEqual(expected, actual) {
+	if !objectsAreEqual(expected, actual) {
 		diff := diff(expected, actual)
 		expected, actual = formatUnequalValues(expected, actual)
 		return Fail(t, fmt.Sprintf("Not equal: \n"+
@@ -345,7 +345,7 @@ func formatUnequalValues(expected, actual interface{}) (e string, a string) {
 // Returns whether the assertion was successful (true) or not (false).
 func EqualValues(t TestingT, expected, actual interface{}, msgAndArgs ...interface{}) bool {
 
-	if !ObjectsAreEqualValues(expected, actual) {
+	if !objectsAreEqualValues(expected, actual) {
 		diff := diff(expected, actual)
 		expected, actual = formatUnequalValues(expected, actual)
 		return Fail(t, fmt.Sprintf("Not equal: \n"+
@@ -584,7 +584,7 @@ func NotEqual(t TestingT, expected, actual interface{}, msgAndArgs ...interface{
 			expected, actual, err), msgAndArgs...)
 	}
 
-	if ObjectsAreEqual(expected, actual) {
+	if objectsAreEqual(expected, actual) {
 		return Fail(t, fmt.Sprintf("Should not be: %#v\n", actual), msgAndArgs...)
 	}
 
@@ -614,7 +614,7 @@ func includeElement(list interface{}, element interface{}) (ok, found bool) {
 	if reflect.TypeOf(list).Kind() == reflect.Map {
 		mapKeys := listValue.MapKeys()
 		for i := 0; i < len(mapKeys); i++ {
-			if ObjectsAreEqual(mapKeys[i].Interface(), element) {
+			if objectsAreEqual(mapKeys[i].Interface(), element) {
 				return true, true
 			}
 		}
@@ -622,7 +622,7 @@ func includeElement(list interface{}, element interface{}) (ok, found bool) {
 	}
 
 	for i := 0; i < listValue.Len(); i++ {
-		if ObjectsAreEqual(listValue.Index(i).Interface(), element) {
+		if objectsAreEqual(listValue.Index(i).Interface(), element) {
 			return true, true
 		}
 	}
@@ -725,7 +725,7 @@ func Subset(t TestingT, list, subset interface{}, msgAndArgs ...interface{}) (ok
 // Returns whether the assertion was successful (true) or not (false).
 func NotSubset(t TestingT, list, subset interface{}, msgAndArgs ...interface{}) (ok bool) {
 	if subset == nil {
-		return false // we consider nil to be equal to the nil set
+		return Fail(t, fmt.Sprintf("got a nil subset which is a subset of every set"), msgAndArgs...)
 	}
 
 	subsetValue := reflect.ValueOf(subset)
